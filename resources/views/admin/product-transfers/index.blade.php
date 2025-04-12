@@ -2,80 +2,81 @@
 @section('title', 'Product Transfer List')
 
 @push('style')
-    @include('import.css.datatable')
+	@include('import.css.datatable')
 @endpush
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Initiate Transfer</div>
-                    <div class="card-body">
-                        <form id="transferForm">
-                            @csrf
-                            <div class="form-group">
-                                <label>From Store</label>
-                                <select name="from_store_id" id="fromStoreSelect" class="form-control" required>
-                                    <option value="">Select From Store</option>
-                                    @foreach ($stores as $store)
-                                        <option value="{{ $store->id }}">{{ $store->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>To Store</label>
-                                <select name="to_store_id" id="toStoreSelect" class="form-control" required>
-                                    <option value="">Select To Store</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Product</label>
-                                <select name="store_product_id" id="productSelect" class="form-control" required
-                                        disabled>
-                                    <option value="">Select Product</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Quantity</label>
-                                <input type="number" name="quantity" id="quantityInput" class="form-control" required
-                                       min="1" disabled>
-                            </div>
-                            <button type="submit" class="btn btn-primary form-control my-3 " id="submitTransfer" disabled>Initiate
-                                Transfer
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Product Transfers</div>
-                    <div class="card-body">
-                        <table class="table table-bordered table-striped" id="example2">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>From Store</th>
-                                <th>To Store</th>
-                                <th>Product</th>
-                                <th>Quantity</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-header">Initiate Transfer</div>
+					<div class="card-body">
+						<form id="transferForm">
+							@csrf
+							<div class="form-group">
+								<label>From Store</label>
+								<select name="from_store_id" id="fromStoreSelect" class="form-control" required>
+									<option value="">Select From Store</option>
+									@foreach ($stores as $store)
+										<option value="{{ $store->id }}">{{ $store->name }}</option>
+									@endforeach
+								</select>
+							</div>
+							<div class="form-group">
+								<label>To Store</label>
+								<select name="to_store_id" id="toStoreSelect" class="form-control" required>
+									<option value="">Select To Store</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label>Product</label>
+								<select name="store_product_id" id="productSelect" class="form-control" required
+								        disabled>
+									<option value="">Select Product</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label>Quantity</label>
+								<input type="number" name="quantity" id="quantityInput" class="form-control" required
+								       min="1" disabled >
+							</div>
+							<button type="submit" class="btn btn-primary form-control my-3 " id="submitTransfer"
+							        disabled>Initiate
+							                 Transfer
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="card">
+					<div class="card-header">Product Transfers</div>
+					<div class="card-body">
+						<table class="table table-bordered table-striped" id="example2">
+							<thead>
+							<tr>
+								<th>ID</th>
+								<th>From Store</th>
+								<th>To Store</th>
+								<th>Product</th>
+								<th>Quantity</th>
+								<th>Status</th>
+								<th>Actions</th>
+							</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 @endsection
 
 @push('script')
-    @include('import.js.datatable')
+	@include('import.js.datatable')
 
-    <script>
+	<script>
 
 
         $(function () {
@@ -170,13 +171,13 @@
             });
         });
 
-        $(function() {
+        $(function () {
             // Store all products and stores
             const allStores = @json($stores);
             const allProducts = @json($storeProducts);
 
             // From Store selection
-            $('#fromStoreSelect').on('change', function() {
+            $('#fromStoreSelect').on('change', function () {
                 const fromStoreId = $(this).val();
 
                 // Reset and disable downstream fields
@@ -194,7 +195,7 @@
             });
 
             // To Store selection
-            $('#toStoreSelect').on('change', function() {
+            $('#toStoreSelect').on('change', function () {
                 const fromStoreId = $('#fromStoreSelect').val();
                 const toStoreId = $(this).val();
 
@@ -219,7 +220,7 @@
             });
 
             // Product selection
-            $('#productSelect').on('change', function() {
+            $('#productSelect').on('change', function () {
                 const selectedProduct = allProducts.find(
                     product => product.id == $(this).val()
                 );
@@ -234,7 +235,7 @@
             });
 
             // Quantity input validation
-            $('#quantityInput').on('input', function() {
+            $('#quantityInput').on('input', function () {
                 const selectedProduct = allProducts.find(
                     product => product.id == $('#productSelect').val()
                 );
@@ -262,5 +263,5 @@
                 }
             });
         });
-    </script>
+	</script>
 @endpush

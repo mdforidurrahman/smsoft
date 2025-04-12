@@ -69,4 +69,15 @@ class Store extends Model
     {
         return $this->hasMany(ProductTransfer::class, 'to_store_id');
     }
+
+
+	public function account()
+	{
+		return $this->hasOne(Account::class);
+	}
+
+	public function bankAccount()
+	{
+		return $this->hasOne(BankAccount::class);
+	}
 }

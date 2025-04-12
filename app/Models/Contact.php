@@ -21,7 +21,11 @@ class Contact extends Model
         'nid',
         'contact_id',
         'store_id',
-      	'image_path'
+      	'image',
+		'finger_print',
+		'signature',
+		'status',
+		'product_category_id'
     ];
 
     public function store()

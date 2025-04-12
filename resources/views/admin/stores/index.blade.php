@@ -63,6 +63,10 @@
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
+                            <label for="name" class="form-label">Store Short Code</label>
+                            <input type="text" class="form-control" id="short_code" name="code" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="address" class="form-label">Address</label>
                             <input type="text" class="form-control" id="address" name="address" required>
                         </div>
@@ -185,8 +189,6 @@
                 columns
             );
         }
-
-
 
         function openEditModal(editUrl) {
             showLoader();

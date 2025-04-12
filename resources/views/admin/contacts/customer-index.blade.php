@@ -31,7 +31,8 @@
                     <thead>
                         <tr>
 
-                            <th>SL</th>
+                            <th>SL</th>			<th>Action</th>
+                            <th>Status</th>
                             <th>Contact Id</th>
                             <th>Name</th>
                             <th>Father Name</th>
@@ -42,8 +43,9 @@
                             <th>Thana</th>
                             <th>Post Office</th>
                             <th>Village</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>Image</th>
+                            <th>Finger Print</th>
+                            <th>Signature</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,6 +73,15 @@
                     name: 'DT_RowIndex',
                     orderable: false,
                     searchable: false
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },      {
+                    data: 'status',
+                    name: 'status'
                 },
                 {
                     data: 'contact_id',
@@ -111,15 +122,17 @@
                     name: 'village'
                 },
                 {
-                    data: 'status',
-                    name: 'status'
+                    data: 'image',
+                    name: 'image'
                 },
                 {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
-                }
+                    data: 'finger_print',
+                    name: 'finger_print'
+                },
+                {
+                    data: 'signature',
+                    name: 'signature'
+                },
             ];
             initDataTable(
                 '#example2',

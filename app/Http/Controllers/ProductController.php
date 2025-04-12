@@ -245,25 +245,36 @@ class ProductController extends Controller
     }
 
 
-    public function getProductsByStore(Request $request)
-    {
-        $storeId = $request->input('store_id');
-        $searchTerm = $request->input('search');
+	public function getProductsByStore(Request $request)
+	{
+		$storeId = $request->input('store_id');
+		$categoryId = $request->input('category_id');
+		$searchTerm = $request->input('search');
 
-        $query = Product::where('store_id', $storeId);
+		// Validate store ID is required
+		if (!$storeId) {
+			return response()->json(['products' => []]);
+		}
 
-        // Optional: Add search functionality
-        if ($searchTerm) {
-            $query->where(function($q) use ($searchTerm) {
-                $q->where('name', 'LIKE', "%{$searchTerm}%")
-                    ->orWhere('sku', 'LIKE', "%{$searchTerm}%");
-            });
-        }
+		$query = Product::where('store_id', $storeId);
 
-        $products = $query->get();
+		// Add category filter if provided
+		if ($categoryId) {
+			$query->where('category_id', $categoryId);
+		}
 
-        return response()->json([
-            'products' => $products
-        ]);
-    }
+		// Add search functionality
+		if ($searchTerm) {
+			$query->where(function($q) use ($searchTerm) {
+				$q->where('name', 'LIKE', "%{$searchTerm}%")
+					->orWhere('sku', 'LIKE', "%{$searchTerm}%");
+			});
+		}
+
+		$products = $query->get();
+
+		return response()->json([
+			'products' => $products
+		]);
+	}
 }

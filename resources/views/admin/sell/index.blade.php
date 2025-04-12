@@ -80,9 +80,6 @@
     <script>
         loadTable();
 
-
-
-
         function loadTable() {
 
             const columns = [
@@ -165,7 +162,6 @@
             );
         }
 
-
         function showInvoice(id) {
             $.ajax({
                 url: `/{{ rtrim($role, '.') }}/sell/${id}/show-invoice`,
@@ -181,11 +177,9 @@
             });
         }
 
-
         function printInvoice() {
             var printContents = document.querySelector('#invoice-details-content').innerHTML;
             var originalContents = document.body.innerHTML;
-
             document.body.innerHTML = printContents;
             window.print();
             document.body.innerHTML = originalContents;
@@ -236,7 +230,6 @@
             });
         }
 
-
         function printInvoice() {
             var printContents = document.querySelector('#invoice-details-content').innerHTML;
             var originalContents = document.body.innerHTML;
@@ -247,9 +240,9 @@
             window.location.reload();
         }
     </script>
-    @include('admin.sell.create', [$supplier, $products])
+    @include('admin.sell.create')
 
-    @include('admin.sell.return-sell', [$supplier, $products])
+    @include('admin.sell.return-sell')
 
     @include('admin.sell.edit')
 @endpush

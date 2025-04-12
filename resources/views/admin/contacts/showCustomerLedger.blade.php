@@ -1,11 +1,11 @@
 {{-- Ledger Modal --}}
 @push('style')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.css">
+	<link rel="stylesheet"
+	      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.css">
 
-    <style>
+	<style>
         .modal-content {
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
@@ -123,105 +123,105 @@
             font-weight: 600;
             color: #4338ca;
         }
-    </style>
+	</style>
 @endpush
 
 <div class="modal fade" id="openLedgerModal" tabindex="-1" aria-labelledby="openLedgerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ledgerModalLabel">Customer Ledger</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="customerId" value="">
+	<div class="modal-dialog modal-dialog-centered modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="ledgerModalLabel">Customer Ledger</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" id="customerId" value="">
 
-                <div class="row mb-4">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="ledgerDateRange" class="mb-2">Date Range:</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                                <input type="text" class="form-control" id="ledgerDateRange" name="daterange">
-                            </div>
-                        </div>
-                    </div>
+				<div class="row mb-4">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="ledgerDateRange" class="mb-2">Date Range:</label>
+							<div class="input-group">
+								<span class="input-group-text"><i class="fas fa-calendar"></i></span>
+								<input type="text" class="form-control" id="ledgerDateRange" name="daterange">
+							</div>
+						</div>
+					</div>
 
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="businessLocation" class="mb-2">Business Location:</label>
-                            <select class="form-control" id="businessLocation">
-                                <option value="all">All Locations</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="businessLocation" class="mb-2">Business Location:</label>
+							<select class="form-control" id="businessLocation">
+								<option value="all">All Locations</option>
+							</select>
+						</div>
+					</div>
+				</div>
 
-                <div class="customer-info mb-4">
-                    <h6>Customer Details</h6>
-                    <div id="customerDetails" class="row">
-                        <!-- Customer details will be populated here -->
-                    </div>
-                </div>
-<div class="customer-info mb-4">
-    <h6>Customer Image</h6>
-    <div class="text-center">
-        <img id="customerImageDisplay" src="" alt="Customer Image" 
-             class="img-thumbnail" style="max-width: 200px; display: none;">
-        <p id="noImageText" class="text-muted mt-2">No image available</p>
-    </div>
-</div>
-              
-                <div class="account-summary mb-4">
-                    <h6>Account Summary</h6>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="summary-card mb-3">
-                                <p class="mb-2">Period: <span id="summaryPeriod" class="summary-value"></span></p>
-                                <p class="mb-2">Total Invoice: <span id="totalInvoice" class="summary-value"></span></p>
-                                <p class="mb-0">Total Paid: <span id="totalPaid" class="summary-value"></span></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="summary-card">
-                                <h6 class="mb-3">Overall Summary</h6>
-                                <p class="mb-2">Total Invoice: <span id="overallInvoice" class="summary-value"></span>
-                                </p>
-                                <p class="mb-2">Total Paid: <span id="overallPaid" class="summary-value"></span></p>
-                                <p class="mb-0">Balance Due: <span id="balanceDue" class="summary-value"></span></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+				<div class="customer-info mb-4">
+					<h6>Customer Details</h6>
+					<div id="customerDetails" class="row">
+						<!-- Customer details will be populated here -->
+					</div>
+				</div>
+				<div class="customer-info mb-4">
+					<h6>Customer Image</h6>
+					<div class="text-center">
+						<img id="customerImageDisplay" src="" alt="Customer Image"
+						     class="img-thumbnail" style="max-width: 200px; display: none;">
+						<p id="noImageText" class="text-muted mt-2" style="display: none;">No image available</p>
+					</div>
+				</div>
 
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Reference No</th>
-                                <th>Type</th>
-                                <th>Location</th>
-                                <th>Payment Status</th>
-                                <th>Debit</th>
-                                <th>Credit</th>
-                                <th>Payment Method</th>
-                                <th>Others</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ledgerTableBody">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="downloadPdfBtn" class="btn btn-primary">
-                    <i class="fas fa-download"></i> Download PDF
-                </button>
-            </div>
-        </div>
-    </div>
+				<div class="account-summary mb-4">
+					<h6>Account Summary</h6>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="summary-card mb-3">
+								<p class="mb-2">Period: <span id="summaryPeriod" class="summary-value"></span></p>
+								<p class="mb-2">Total Invoice: <span id="totalInvoice" class="summary-value"></span></p>
+								<p class="mb-0">Total Paid: <span id="totalPaid" class="summary-value"></span></p>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="summary-card">
+								<h6 class="mb-3">Overall Summary</h6>
+								<p class="mb-2">Total Invoice: <span id="overallInvoice" class="summary-value"></span>
+								</p>
+								<p class="mb-2">Total Paid: <span id="overallPaid" class="summary-value"></span></p>
+								<p class="mb-0">Balance Due: <span id="balanceDue" class="summary-value"></span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped">
+						<thead>
+						<tr>
+							<th>Date</th>
+							<th>Reference No</th>
+							<th>Type</th>
+							<th>Location</th>
+							<th>Payment Status</th>
+							<th>Debit</th>
+							<th>Credit</th>
+							<th>Payment Method</th>
+							<th>Others</th>
+						</tr>
+						</thead>
+						<tbody id="ledgerTableBody">
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<button type="button" id="downloadPdfBtn" class="btn btn-primary">
+					<i class="fas fa-download"></i> Download PDF
+				</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js"></script>
@@ -288,7 +288,7 @@
                         ?.replace(/"/g, '') || `customer_ledger.pdf`;
 
                     // Create a blob URL and trigger download
-                    const blob = new Blob([data], { type: 'application/pdf' });
+                    const blob = new Blob([data], {type: 'application/pdf'});
                     const link = document.createElement('a');
                     link.href = window.URL.createObjectURL(blob);
                     link.download = filename;
@@ -434,18 +434,28 @@
 
         $('#customerId').val(customer.id);
 
-
-        console.log('Customer ID:', customer.id);
-
-
         $('#customerDetails').html(`
-            <p><strong>Name:</strong> ${sanitizeHtml(customer.name || '-')}</p>
-            <p><strong>District:</strong> ${sanitizeHtml(customer.district || '-')}</p>
-            <p><strong>Thana:</strong> ${sanitizeHtml(customer.thana || '-')}</p>
-            <p><strong>Post Office:</strong> ${sanitizeHtml(customer.post_office || '-')}</p>
-            <p><strong>Village:</strong> ${sanitizeHtml(customer.village || '-')}</p>
-            <p><strong>Mobile:</strong> ${sanitizeHtml(customer.phone || '-')}</p>
-        `);
+        <p><strong>Name:</strong> ${sanitizeHtml(customer.name || '-')}</p>
+        <p><strong>District:</strong> ${sanitizeHtml(customer.district || '-')}</p>
+        <p><strong>Thana:</strong> ${sanitizeHtml(customer.thana || '-')}</p>
+        <p><strong>Post Office:</strong> ${sanitizeHtml(customer.post_office || '-')}</p>
+        <p><strong>Village:</strong> ${sanitizeHtml(customer.village || '-')}</p>
+        <p><strong>Mobile:</strong> ${sanitizeHtml(customer.phone || '-')}</p>
+    `);
+
+        // Handle customer image display
+        const imageDisplay = $('#customerImageDisplay');
+        const noImageText = $('#noImageText');
+
+        if (customer.image) {
+            // If image exists, show it and hide the "no image" text
+            imageDisplay.attr('src', window.location.origin + '/' + customer.image).show();
+            noImageText.hide();
+        } else {
+            // If no image, hide the image element and show the text
+            imageDisplay.hide();
+            noImageText.show();
+        }
     }
 
     // Function to update account summary with error handling
@@ -505,8 +515,6 @@
             `);
         });
     }
-
-
     // Function to print ledger
     function printLedger() {
         window.print();
@@ -514,9 +522,7 @@
 
     // Event listeners
     $('.btn-group button').click(function (e) {
-
-        preven
-
+		e.preventDefault();
         $('.btn-group button').removeClass('active');
         $(this).addClass('active');
         const customerId = $('#customerId').val();

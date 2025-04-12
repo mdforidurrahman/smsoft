@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccountTransaction;
 use App\Models\Contact;
 use App\Models\Expense;
 use App\Models\Purchase;
@@ -182,13 +183,13 @@ class DashboardController extends Controller
             //     ->sum('total_return_amount');
 
             // Get Sales
-            $totalSales = Sell::when($selectedStoreId, function ($query) use ($selectedStoreId) {
+            $totalSales = Sell::with('payments')->when($selectedStoreId, function ($query) use ($selectedStoreId) {
                 return $query->where('store_id', $selectedStoreId);
             })->when($dateRange !== 'all', $dateFilter)
                 ->sum('net_total');
 
             // Get sales due
-            $totalSalesDue = Sell::when($selectedStoreId, function ($query) use ($selectedStoreId) {
+            $totalSalesDue = Sell::with('payments')->when($selectedStoreId, function ($query) use ($selectedStoreId) {
                 return $query->where('store_id', $selectedStoreId);
             })->when($dateRange !== 'all', $dateFilter)
                 ->sum('payment_due');
@@ -205,8 +206,12 @@ class DashboardController extends Controller
 
             $totalCashInHand = $totalSales - $totalSalesDue - $totalExpense;
           
-            $bankDeposite=$totalCashInHand;
-          
+            $bankDeposite=AccountTransaction::when($selectedStoreId, function ($query) use ($selectedStoreId) {
+				return $query->where('store_id', $selectedStoreId);
+			})->when($dateRange !== 'all', $dateFilter)
+				->where('transaction_type','withdrawal')
+				->sum('amount');
+
 
             return [
                 // [

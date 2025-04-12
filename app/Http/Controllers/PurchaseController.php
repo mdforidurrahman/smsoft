@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\SaleTransactionService;
 use Exception;
 use App\Models\Store;
 use App\Models\Contact;
@@ -21,15 +22,18 @@ use App\Http\Requests\UpdatePurchaseRequest;
 
 class PurchaseController extends Controller
 {
-    /**
+
+	protected SaleTransactionService $transactionService;
+
+	public function __construct(SaleTransactionService $transactionService) {
+		$this->transactionService = $transactionService;
+	}
+
+	/**
      * Display a listing of the resource.
      */
     public function index()
     {
-
-//        $data = Purchase::with('purchaseItems','purchaseItems.product')->latest()->get();
-////
-//        return $data;
         if (request()->ajax()) {
             $data = Purchase::with('purchaseItems', 'purchaseItems.product')->latest();
 
@@ -197,18 +201,6 @@ class PurchaseController extends Controller
                 Product::where('id', $item['product_id'])
                     ->increment('quantity', $item['quantity']);
             }
-
-            // Create shipping details
-            // if ($request->has('shipping_address')) {
-            //     ShippingDetail::create([
-            //         'purchase_id' => $purchase->id,
-            //         'shipping_address' => $request->shipping_address,
-            //         'shipping_method' => $request->shipping_method,
-            //         'shipping_cost' => $request->shipping_cost,
-            //         'expected_delivery_date' => $request->expected_delivery_date,
-            //     ]);
-            // }
-
             // Handle advance payment
             if ($request->advance_balance > 0) {
                 PurchasePayment::create([
@@ -221,6 +213,16 @@ class PurchaseController extends Controller
                     'payment_status' => 'completed',
                 ]);
             }
+
+	 $this->transactionService->recordExpense(
+				$request->business_store_id,
+				$request->advance_balance,
+				"Purchase",
+				'Purchase Expense for ' . $purchase->id,
+				Auth::id(),
+				$purchase->id
+			);
+
 
             DB::commit();
 
@@ -376,19 +378,6 @@ class PurchaseController extends Controller
                     ->increment('quantity', $quantityDifference);
             }
 
-            // Update shipping details
-            // if ($request->has('shipping_address')) {
-            //     $purchase->shippingDetail()->delete();
-            //     ShippingDetail::create([
-            //         'purchase_id' => $purchase->id,
-            //         'shipping_address' => $request->shipping_address,
-            //         'shipping_method' => $request->shipping_method,
-            //         'shipping_cost' => $request->shipping_cost,
-            //         'expected_delivery_date' => $request->expected_delivery_date,
-            //     ]);
-            // }
-
-            // Handle advance payment updates
             if ($request->advance_balance > 0) {
                 // Delete existing payments if any
                 $purchase->payments()->delete();
@@ -403,6 +392,16 @@ class PurchaseController extends Controller
                     'payment_status' => 'completed',
                 ]);
             }
+
+
+			$updatedExpense = $this->transactionService->updateTransaction(
+				$purchase->id,
+				'expense',
+				$request->advance_balance,
+				"Purchase",
+				'Expense for ' . $purchase->id,
+				Auth::id()
+			);
 
             DB::commit();
 

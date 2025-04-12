@@ -51,6 +51,18 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <label for="category_id" class="form-label">Category Name*</label>
+                            <div class="input-group">
+                                <select name="category_id" class="form-select" id="category_id" required>
+                                    <option value="">Please Select</option>
+                                    @forelse($category as $key => $data)
+                                        <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                            </div>
+                        </div>
 
                         <div class="col-md-6">
                             <div class="mb-3">
@@ -122,38 +134,38 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="customer_image" class="form-label">Customer Image</label>
-                                <input type="file" class="form-control" id="customer_image" name="customer_image"
+                                <label for="image" class="form-label">Customer Image</label>
+                                <input type="file" class="form-control" id="image" name="image"
                                     accept="image/*" required>
                                 <!-- Preview Image -->
                                 <div class="mt-2">
-                                    <img id="preview_customer_image" src="" alt="Preview" class="img-thumbnail"
+                                    <img id="preview_image" src="" alt="Preview" class="img-thumbnail"
                                         style="width: 150px; height: 150px; display: none;">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="customer_fingerprint" class="form-label">Customer
+                                <label for="finger_print" class="form-label">Customer
                                     Fingerprint</label>
-                                <input type="file" class="form-control" id="customer_fingerprint"
-                                    name="customer_fingerprint" accept="image/*" required>
+                                <input type="file" class="form-control" id="finger_print"
+                                    name="finger_print" accept="image/*" required>
                                 <!-- Preview Fingerprint -->
                                 <div class="mt-2">
-                                    <img id="preview_customer_fingerprint" src="" alt="Preview" class="img-thumbnail"
+                                    <img id="preview_fingerprint" src="" alt="Preview" class="img-thumbnail"
                                         style="width: 150px; height: 150px; display: none;">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="customer_signature" class="form-label">Customer
+                                <label for="signature" class="form-label">Customer
                                     Signature</label>
-                                <input type="file" class="form-control" id="customer_signature"
-                                    name="customer_signature" accept="image/*" required>
+                                <input type="file" class="form-control" id="signature"
+                                    name="signature" accept="image/*" required>
                                 <!-- Preview Signature -->
                                 <div class="mt-2">
-                                    <img id="preview_customer_signature" src="" alt="Preview" class="img-thumbnail"
+                                    <img id="preview_signature" src="" alt="Preview" class="img-thumbnail"
                                         style="width: 150px; height: 150px; display: none;">
                                 </div>
                             </div>
@@ -234,16 +246,16 @@ function submitContactForm() {
     }
 
     // Event listeners for each input
-    document.getElementById('customer_image').addEventListener('change', function () {
-        showPreview(this, 'preview_customer_image');
+    document.getElementById('image').addEventListener('change', function () {
+        showPreview(this, 'preview_image');
     });
 
-    document.getElementById('customer_fingerprint').addEventListener('change', function () {
-        showPreview(this, 'preview_customer_fingerprint');
+    document.getElementById('finger_print').addEventListener('change', function () {
+        showPreview(this, 'preview_fingerprint');
     });
 
-    document.getElementById('customer_signature').addEventListener('change', function () {
-        showPreview(this, 'preview_customer_signature');
+    document.getElementById('signature').addEventListener('change', function () {
+        showPreview(this, 'preview_signature');
     });
     //IMAGE PREVIEW END
 
@@ -254,11 +266,6 @@ function submitContactForm() {
         e.preventDefault();
         submitContactForm();
     });
-
-
-
-
-
 
     const thanaList = {
 
@@ -298,12 +305,9 @@ function submitContactForm() {
         ]
     };
 
-
-
     document.getElementById('district').addEventListener('change', function () {
         const district = this.value;
         const thanaSelect = document.getElementById('thana');
-
 
         // Reset
         thanaSelect.innerHTML = '<option value="">Select Thana</option>';
@@ -316,7 +320,4 @@ function submitContactForm() {
             });
         }
     });
-
-
-
 </script>

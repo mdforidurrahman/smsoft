@@ -1,113 +1,117 @@
-<style>
-    .modal-content {
-        border-radius: 12px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
 
-    .modal-header {
-        background: #4f46e5;
-        color: white;
-        border-radius: 12px 12px 0 0;
-        padding: 1rem 1.5rem;
-    }
+@push('style')
+    <style>
+        .modal-content {
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
 
-    .payment-summary {
-        background: #f8fafc;
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
+        .modal-header {
+            background: #4f46e5;
+            color: white;
+            border-radius: 12px 12px 0 0;
+            padding: 1rem 1.5rem;
+        }
 
-    .payment-summary .row {
-        margin-bottom: 0.5rem;
-    }
+        .payment-summary {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
 
-    .amount-label {
-        font-weight: 600;
-        color: #1e293b;
-    }
+        .payment-summary .row {
+            margin-bottom: 0.5rem;
+        }
 
-    .amount-value {
-        font-size: 1.1rem;
-        color: #4f46e5;
-        font-weight: 600;
-    }
+        .amount-label {
+            font-weight: 600;
+            color: #1e293b;
+        }
 
-    .zero-amount {
-        color: #22c55e;
-    }
+        .amount-value {
+            font-size: 1.1rem;
+            color: #4f46e5;
+            font-weight: 600;
+        }
 
-    .due-amount {
-        color: #ef4444;
-    }
+        .zero-amount {
+            color: #22c55e;
+        }
 
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
+        .due-amount {
+            color: #ef4444;
+        }
 
-    .form-label {
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-        color: #1e293b;
-    }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
 
-    .form-control {
-        border-radius: 6px;
-        border: 1px solid #e2e8f0;
-        padding: 0.625rem;
-    }
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
 
-    .form-control:focus {
-        border-color: #4f46e5;
-        box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
-    }
+        .form-control {
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            padding: 0.625rem;
+        }
 
-    .btn-save {
-        background: #4f46e5;
-        color: white;
-        border: none;
-        padding: 0.625rem 1.5rem;
-        border-radius: 6px;
-        font-weight: 500;
-    }
+        .form-control:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+        }
 
-    .btn-save:hover {
-        background: #4338ca;
-    }
+        .btn-save {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.625rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+        }
 
-    .btn-close {
-        background: rgb(255, 255, 255);
-        color: white;
-        border: none;
-        padding: 0.625rem 1.5rem;
-        border-radius: 6px;
-        font-weight: 500;
-    }
+        .btn-save:hover {
+            background: #4338ca;
+        }
 
-    .required-field::after {
-        content: "*";
-        color: #ef4444;
-        margin-left: 4px;
-    }
+        .btn-close {
+            background: rgb(255, 255, 255);
+            color: white;
+            border: none;
+            padding: 0.625rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+        }
 
-    .file-upload {
-        border: 2px dashed #e2e8f0;
-        border-radius: 6px;
-        padding: 1rem;
-        text-align: center;
-        cursor: pointer;
-    }
+        .required-field::after {
+            content: "*";
+            color: #ef4444;
+            margin-left: 4px;
+        }
 
-    .file-upload:hover {
-        border-color: #4f46e5;
-    }
+        .file-upload {
+            border: 2px dashed #e2e8f0;
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+        }
 
-    .file-info {
-        font-size: 0.875rem;
-        color: #64748b;
-        margin-top: 0.5rem;
-    }
-</style>
+        .file-upload:hover {
+            border-color: #4f46e5;
+        }
+
+        .file-info {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+
+    </style>
+@endpush
 
 
 <div class="modal fade" id="addPaymentModal" tabindex="-1" aria-labelledby="addPaymentModalLabel" aria-hidden="true">
@@ -142,7 +146,7 @@
                             <div class="col-md-6">
                                 <p class="mb-2">
                                     <span class="amount-label">Total Paid:</span><br>
-                                    <span class="amount-value" id="totalPaid"></span>
+                                    <span class="amount-value" id="totalPaidSection"></span>
                                 </p>
                             </div>
                         </div>
@@ -153,10 +157,11 @@
                                     <span class="amount-value due-amount" id="totalDue"></span>
                                 </p>
                             </div>
+
                             <div class="col-md-6">
                                 <p class="mb-2">
-                                    <span class="amount-label">Opening Balance:</span><br>
-                                    <span class="amount-value" id="openingBalance"></span>
+                                    <span class="amount-label">Total Discount:</span><br>
+                                    <span class="amount-value" id="totalDiscount"></span>
                                 </p>
                             </div>
                         </div>
@@ -184,10 +189,22 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label required-field">Amount</label>
-                        <input type="number" class="form-control" name="amount" step="0.01" required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Discount Amount</label>
+                                <input type="number" class="form-control" name="discount_amount" step="0.01" value="0">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label required-field">Amount</label>
+                                <input type="number" class="form-control" name="amount" step="0.01" required>
+                            </div>
+                        </div>
                     </div>
+
+
 
                     <div class="form-group mb-0">
                         <label class="form-label">Payment Note</label>
@@ -204,6 +221,8 @@
 </div>
 
 <script>
+
+
     function openPaymentModal(customerId) {
         // Reset form
         $('#paymentForm')[0].reset();
@@ -231,17 +250,25 @@
     }
 
     function updatePaymentModalDetails(response) {
-        console.log(response); // Log the entire response for debugging
+        console.log("Response object:", response);
+        console.log("Total paid value:", response.total_paid);
+        console.log("Total paid type:", typeof response.total_paid);
 
         if (response.success) {
             $('#customerName').text(response.customer_name || '');
-            $('#totalSale').text(formatCurrency(response.total_sale));
-            $('#totalPaid').text(formatCurrency(response.total_paid));
-            $('#totalDue').text(formatCurrency(response.total_due));
-            $('#openingBalance').text(formatCurrency(response.opening_balance));
+            $('#totalSale').text(formatCurrency(parseFloat(response.total_sale) || 0));
 
-            // Set max amount in payment input
-            $('input[name="amount"]').attr('max', response.total_due);
+            // Debug the totalPaidSection element
+            console.log("totalPaidSection element exists:", $('#totalPaidSection').length > 0);
+            console.log("Attempting to set total paid to:", formatCurrency(parseFloat(response.total_paid) || 0));
+
+            $('#totalPaidSection').empty().text(formatCurrency(parseFloat(response.total_paid) || 0));
+            $('#totalDue').text(formatCurrency(parseFloat(response.total_due) || 0));
+            $('#totalDiscount').text(formatCurrency(parseFloat(response.total_discount) || 0));
+            $('#openingBalance').text(formatCurrency(parseFloat(response.opening_balance) || 0));
+
+            // Check after setting
+            console.log("Total paid element text after setting:", $('#totalPaidSection').text());
         } else {
             console.error('Error loading payment details:', response.message);
             alert('Error loading customer payment details');
@@ -259,6 +286,14 @@
         const formData = new FormData(form);
         const customerId = $('#customerId').val();
 
+        const amount = parseFloat(formData.get('amount')) || 0;
+        const discount = parseFloat(formData.get('discount_amount')) || 0;
+
+        if (amount <= 0 && discount <= 0) {
+            AjaxNotifications.error('Please enter either a payment amount or discount amount');
+            return;
+        }
+
         $.ajax({
             url: `/customer/ledger/${customerId}/pay`,
             method: 'POST',
@@ -272,7 +307,7 @@
                     loadLedgerData(`/customer/ledger/${customerId}`);
                 }
 
-                AjaxNotifications.success('Payment added successfully');
+                AjaxNotifications.success('Payment and discount applied successfully');
             },
             error: function(xhr) {
                 let response = xhr.responseText;

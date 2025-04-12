@@ -127,7 +127,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row mb-3">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="customer_id" class="form-label">Customer*</label>
                                     <div class="input-group">
                                         <select name="customer_id" class="form-select" id="customer_id" required>
@@ -143,7 +143,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="store_id" class="form-label">Store*</label>
                                     <div class="input-group">
                                         <select name="store_id" class="form-select" id="store_id" required>
@@ -153,7 +153,19 @@
                                             @empty
                                             @endforelse
                                         </select>
+                                    </div>
+                                </div>
 
+                                <div class="col-md-4">
+                                    <label for="category_id" class="form-label">Category*</label>
+                                    <div class="input-group">
+                                        <select name="category_id" class="form-select" id="category_id" required>
+                                            <option value="">Please Select any</option>
+                                            @forelse($categories as $key=>$data)
+                                                <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                            @empty
+                                            @endforelse
+                                        </select>
                                     </div>
                                 </div>
 
@@ -260,44 +272,6 @@
 
                         </div>
                     </div>
-                    <!-- Shipping Information -->
-{{--                    <div class="card mb-3">--}}
-{{--                        <div class="card-header">--}}
-{{--                            <h6 class="mb-0">Shipping Details</h6>--}}
-{{--                        </div>--}}
-{{--                        <div class="card-body">--}}
-{{--                            <div class="row mb-3">--}}
-{{--                                <div class="col-md-6">--}}
-{{--                                    <label for="shipping_address" class="form-label">Shipping Address:</label>--}}
-{{--                                    <input type="text" class="form-control" id="shipping_address"--}}
-{{--                                           name="shipping_address">--}}
-{{--                                </div>--}}
-{{--                                <div class="col-md-6">--}}
-{{--                                    <label for="shipping_method" class="form-label">Shipping Method:</label>--}}
-{{--                                    <select class="form-select" id="shipping_method" name="shipping_method">--}}
-{{--                                        <option value="reguler_delyvery">Reguler Delyvery</option>--}}
-{{--                                        <option value="express_transfer">Express Delyvery</option>--}}
-
-{{--                                    </select>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-
-{{--                            <div class="row mb-3">--}}
-{{--                                <div class="col-md-6">--}}
-{{--                                    <label for="shipping_cost" class="form-label">Shipping Cost:</label>--}}
-{{--                                    <input type="number" class="form-control" id="shipping_cost"--}}
-{{--                                           name="shipping_cost" value="0" min="0" step="0.01">--}}
-{{--                                </div>--}}
-{{--                                <div class="col-md-6">--}}
-{{--                                    <label for="expected_delivery_date" class="form-label">Expected Delivery--}}
-{{--                                        Date:</label>--}}
-{{--                                    <input type="date" class="form-control" id="expected_delivery_date"--}}
-{{--                                           name="expected_delivery_date">--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
 
                     <!-- Payment Information -->
                     <div class="card mb-3">
@@ -389,10 +363,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-
     <script>
-
-
         function initializeProductSearch() {
             $('#searchProduct').select2({
                 placeholder: 'Search Products by Name, SKU',
@@ -407,6 +378,7 @@
                     data: function (params) {
                         return {
                             store_id: $('#store_id').val(),
+                            category_id: $('#category_id').val(), // Add category filter
                             search: params.term
                         };
                     },
@@ -415,7 +387,7 @@
                             results: data.products.map(function (product) {
                                 return {
                                     id: product.id,
-                                    text: `${product.name} (${product.sku}) - $${product.price}`,
+                                    text: `${product.name} (${product.sku}) - (Quantity : ${product.quantity})`,
                                     price: product.price
                                 };
                             })
@@ -428,6 +400,27 @@
                 templateSelection: formatProductSelection
             });
         }
+        // Update both store and category change events
+        $('#store_id, #category_id').on('change', function() {
+            const storeId = $('#store_id').val();
+
+            if (storeId) {
+                // Enable product search and reset
+                $('#searchProduct')
+                        .prop('disabled', false)
+                        .val(null)
+                        .trigger('change');
+
+                // Reinitialize product search with current filters
+                initializeProductSearch();
+            } else {
+                // Disable product search if no store selected
+                $('#searchProduct')
+                        .prop('disabled', true)
+                        .val(null)
+                        .trigger('change');
+            }
+        });
 
         function formatProduct(product) {
             if (!product.id) return product.text;
@@ -452,6 +445,7 @@
                 const storeId = $(this).val();
 
                 if (storeId) {
+
                     // Enable product search and reset
                     $('#searchProduct')
                         .prop('disabled', false)

@@ -29,14 +29,17 @@
                     <tr>
 
                         <th>SL</th>
+                        <th>Action</th>
+                        <th>Status</th>
                         <th>Contact Id</th>
                         <th>Name</th>
                         <th>Role</th>
                         <th>Phone</th>
                         <th>Nid</th>
                         <th>Address</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Image</th>
+                        <th>Finger Print</th>
+                        <th>Signature</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -70,6 +73,15 @@
                     searchable: false
                 },
                 {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },      {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
                     data: 'contact_id',
                     name: 'contact_id'
                 },
@@ -90,17 +102,18 @@
                 {
                     data: 'address',
                     name: 'address'
+                },  {
+                    data: 'image',
+                    name: 'image'
                 },
                 {
-                    data: 'status',
-                    name: 'status'
+                    data: 'finger_print',
+                    name: 'finger_print'
                 },
                 {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
-                }
+                    data: 'signature',
+                    name: 'signature'
+                },
             ];
             initDataTable(
                 '#example2',
