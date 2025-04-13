@@ -6,6 +6,7 @@ return [
     App\Providers\RoleServiceProvider::class,
     App\Providers\RoleSessionServiceProvider::class,
     App\Providers\RouteServiceProvider::class,
-    Yajra\DataTables\DataTablesServiceProvider::class,
+    App\Providers\SMSServiceProvider::class,
     Barryvdh\Debugbar\ServiceProvider::class,
+    Yajra\DataTables\DataTablesServiceProvider::class,
 ];

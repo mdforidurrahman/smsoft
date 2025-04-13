@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductCategory;
 use App\Services\SaleTransactionService;
 use Exception;
 use App\Models\Store;
@@ -90,9 +91,9 @@ class PurchaseController extends Controller
         } else {
             $storeName = Auth::User()->stores;
         }
+		$categories = ProductCategory::where('status', 1)->get();
 
-
-        return view('admin.purchase.index', compact('supplier', 'products', 'storeName'));
+        return view('admin.purchase.index', compact('supplier', 'products', 'storeName','categories'));
     }
 
     /**

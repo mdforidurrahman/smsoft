@@ -56,7 +56,7 @@
                             <div class="input-group">
                                 <select name="category_id" class="form-select" id="category_id" required>
                                     <option value="">Please Select</option>
-                                    @forelse($categories as $key => $data)
+                                    @forelse($category as $key => $data)
                                         <option value="{{ $data->id }}">{{ $data->name }}</option>
                                     @empty
                                     @endforelse

@@ -246,6 +246,20 @@ class SellsController extends Controller
 				$sell->id
 			);
 
+
+			$saleDetails = [
+				'order_id' => $sale->id,
+				'amount' => $sale->total_amount,
+				'item_count' => $sale->items->count(),
+				'delivery_address' => $sale->shipping_address
+			];
+
+			$response = $this->smsService->sendSaleConfirmation(
+				$sale->customer->phone,
+				$sale->customer->name,
+				$saleDetails
+			);
+
 			DB::commit();
 			$sell->load('items', 'payments', 'shippingDetail');
 
@@ -435,16 +449,6 @@ class SellsController extends Controller
 				'Sales',
 				'Sales Record for ' . $sell->id,
 				Auth::id()
-			);
-
-
-			$this->transactionService->recordExpense(
-				$sell->store_id,
-				$discountAmount,
-				'Discount',
-				'Expense for Discount Record for Sell' . $sell->id,
-				Auth::id(),
-				$sell->id
 			);
 
 			if (!$updatedTransaction) {

@@ -72,7 +72,7 @@ class ContactController extends Controller
 				->latest();
 		}
 
-		$category = ProductCategory::where('status', 1)->get();
+		$categories = ProductCategory::where('status', 1)->get();
 
 
 		if (request()->ajax()) {
@@ -119,7 +119,7 @@ class ContactController extends Controller
 				->make(true);
 		}
 
-		return view('admin.contacts.customer-index', compact('storeName', 'category'));
+		return view('admin.contacts.customer-index', compact('storeName', 'categories'));
 	}
 
 	public function downloadLedgerPdf($customerId) {
@@ -182,7 +182,7 @@ class ContactController extends Controller
 				->whereIn('store_id', Auth::user()->stores->pluck('id')) // make sure this is an array of IDs
 				->latest();
 		}
-
+		$categories = ProductCategory::where('status', 1)->get();
 		if (request()->ajax()) {
 			return DataTables::of($projects)
 				->addIndexColumn()
@@ -221,7 +221,7 @@ class ContactController extends Controller
 				->make(true);
 		}
 
-		return view('admin.contacts.supplier-index', compact('storeName'));
+		return view('admin.contacts.supplier-index', compact('storeName','categories'));
 	}
 
 

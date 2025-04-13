@@ -237,7 +237,7 @@
                     $('#editId').val(response.id);
                     $('#editContact_id').val(response.contact_id);
                     $('#editStore_id').val(response.store_id);
-                    $('#editCategory_id').val(response.store_id);
+                    $('#editCategory_id').val(response.product_category_id);
                     $('#editName').val(response.name);
                     $('#editFatherName').val(response.father_name);
                     $('#editRole').val(response.role);

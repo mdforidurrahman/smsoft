@@ -12,6 +12,7 @@ use App\Models\SellItem;
 use App\Models\SellShipping;
 use App\Models\Store;
 use App\Services\SaleTransactionService;
+use App\Services\SMSService;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,9 +23,11 @@ class SellsController extends Controller
 {
 
 	protected SaleTransactionService $transactionService;
+	protected SMSService $smsService;
 
-	public function __construct(SaleTransactionService $transactionService) {
+	public function __construct(SaleTransactionService $transactionService,SMSService $smsService) {
 		$this->transactionService = $transactionService;
+		$this->smsService = $smsService;
 	}
 
 	/**
@@ -246,6 +249,19 @@ class SellsController extends Controller
 				$sell->id
 			);
 
+
+			$saleDetails = [
+				'order_id' => $sell->id,
+				'amount' => $sell->net_total,
+				'item_count' => $sell->items->count(),
+			];
+
+			$response = $this->smsService->sendSaleConfirmation(
+				$sell->customer->phone,
+				$sell->customer->name,
+				$saleDetails
+			);
+
 			DB::commit();
 			$sell->load('items', 'payments', 'shippingDetail');
 
@@ -440,6 +456,18 @@ class SellsController extends Controller
 			if (!$updatedTransaction) {
 				return response()->json(['error' => 'Could not update transaction.'], 500);
 			}
+
+			$saleDetails = [
+				'order_id' => $sell->id,
+				'amount' => $sell->net_total,
+				'item_count' => $sell->items->count(),
+			];
+
+			$response = $this->smsService->sendSaleConfirmation(
+				$sell->customer->phone,
+				$sell->customer->name,
+				$saleDetails
+			);
 
 			DB::commit();
 			$sell->load('items', 'payments', 'shippingDetail');

@@ -92,7 +92,7 @@ class PurchaseController extends Controller
         }
 
 
-        return view('admin.purchase.index', compact('supplier', 'products', 'storeName'));
+        return view('admin.purchase.index', compact('supplier', 'products', 'storeName','categories'));
     }
 
     /**
@@ -378,19 +378,6 @@ class PurchaseController extends Controller
                     ->increment('quantity', $quantityDifference);
             }
 
-            // Update shipping details
-            // if ($request->has('shipping_address')) {
-            //     $purchase->shippingDetail()->delete();
-            //     ShippingDetail::create([
-            //         'purchase_id' => $purchase->id,
-            //         'shipping_address' => $request->shipping_address,
-            //         'shipping_method' => $request->shipping_method,
-            //         'shipping_cost' => $request->shipping_cost,
-            //         'expected_delivery_date' => $request->expected_delivery_date,
-            //     ]);
-            // }
-
-            // Handle advance payment updates
             if ($request->advance_balance > 0) {
                 // Delete existing payments if any
                 $purchase->payments()->delete();
@@ -405,6 +392,16 @@ class PurchaseController extends Controller
                     'payment_status' => 'completed',
                 ]);
             }
+
+
+			$updatedExpense = $this->transactionService->updateTransaction(
+				$purchase->id,
+				'expense',
+				$request->advance_balance,
+				"Purchase",
+				'Expense for ' . $purchase->id,
+				Auth::id()
+			);
 
             DB::commit();
 
