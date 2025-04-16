@@ -89,7 +89,11 @@
 				</a>
 				<ul>
 					@permission('contact_view')
-		
+{{-- 					<li> --}}
+{{-- 						<a href="{{ route($role . '.contacts.index') }}"><i class="bx bx-address-book"></i> --}}
+{{-- 							Contact List --}}
+{{-- 						</a> --}}
+{{-- 					</li> --}}
 					@endpermission
 
 					@permission('customer_view')
@@ -297,7 +301,7 @@
 			@endpermission
 
 			{{--            @permission('account_view')--}}
-			@permission('user_view')
+			@permission('accounts_view')
 			<li>
 				<a href="javascript:;" class="has-arrow">
 					<div class="parent-icon"><i class="bx bx-user-circle"></i></div>

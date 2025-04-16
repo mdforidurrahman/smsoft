@@ -300,29 +300,36 @@
 			</li>
 			@endpermission
 
-			{{--            @permission('account_view')--}}
-			@permission('user_view')
+			@permission('accounts_view')
 			<li>
 				<a href="javascript:;" class="has-arrow">
 					<div class="parent-icon"><i class="bx bx-user-circle"></i></div>
 					<div class="menu-title">Accounts</div>
 				</a>
 				<ul>
+					@permission('accounts_transaction')
 					<li>
 						<a href="{{ route($role . '.account-transactions.index') }}"><i class="bx bx-list-ul"></i>
 							Account Transaction
 						</a>
 					</li>
+					@endpermission
+					@permission('accounts_banks_view')
+
 					<li>
 						<a href="{{ route($role . '.banks.index') }}"><i class="bx bx-list-ul"></i>
 							Banks
 						</a>
 					</li>
+					@endpermission
+					@permission('accounts_withdrawals')
 					<li>
 						<a href="{{ route($role . '.withdrawals.index') }}"><i class="bx bx-list-ul"></i>
 							WithDrawal
 						</a>
 					</li>
+					@endpermission
+
 				</ul>
 			</li>
 			@endpermission

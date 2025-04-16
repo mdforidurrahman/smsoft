@@ -62,7 +62,7 @@ class ContactController extends Controller
 	public function customers() {
 		$projects = Contact::whereRole('customer');
 
-		if (Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager')) {
+		if (Auth::user()->hasRole('admin')) {
 			$storeName = Store::where('status', 1)->latest()->get();
 			$projects = $projects->latest();
 		} else {
@@ -173,7 +173,7 @@ class ContactController extends Controller
 	public function supplier() {
 		$projects = Contact::whereRole('supplier');
 
-		if (Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager')) {
+		if (Auth::user()->hasRole('admin')) {
 			$storeName = Store::where('status', 1)->latest()->get();
 			$projects = $projects->latest();
 		} else {
