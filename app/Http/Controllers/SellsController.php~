@@ -314,6 +314,157 @@ class SellsController extends Controller
 		}
 	}
 
+	//	public function store(StoreSellRequest $request) {
+//		try {
+//
+//			Log::info($request->all());
+//
+//
+//			$data = $request->isJson() ? $request->json()->all() : $request->all();
+//			DB::beginTransaction();
+//			$totalBeforeTax = $this->calculateTotalBeforeTax($request->items);
+//			$discountAmount = 0;
+//			$discountType = $request->discount_type;
+//			$discountPercentage = 0;
+//			if ($discountType === 'fixed') {
+//				$discountAmount = $request->discount_amount;
+//				$discountPercentage = 0;
+//			}
+//			if ($discountType === 'percentage') {
+//				$discountAmount = (($totalBeforeTax + $request->tax_amount) * $request->discount_amount) / 100;
+//				$discountPercentage = $request->discount_amount;
+//			}
+//			$netTotal = $totalBeforeTax - $discountAmount + $request->tax_amount + ($request->shipping_cost ?? 0);
+//
+//			$paymentDue = $netTotal - ($request->advance_balance ?? 0);
+//
+//			$invoiceNumber = strtoupper(bin2hex(random_bytes(15)));
+//			// Create sell record
+//			$reference_no = '';
+//			if (!$request->reference_no == null) {
+//				$reference_no = $request->reference_no;
+//			} else {
+//				$reference_no = strtoupper(bin2hex(random_bytes(8)));
+//			}
+//			$sell = Sell::create([
+//				'store_id' => $request->store_id,
+//				'customer_id' => $request->customer_id,
+//				'reference_no' => $reference_no,
+//				'invoice_no' => $invoiceNumber,
+//				'sell_date' => $request->sell_date,
+//				'sell_status' => $request->sell_status,
+//				'payment_term' => $request->pay_term,
+//				'payment_term_type' => $request->pay_term_type,
+//				'total_before_tax' => $totalBeforeTax,
+//
+//
+//				'tax_amount' => $request->tax_amount ?? 0,
+//				'discount_type' => $request->discount_type,
+//				'discount_amount' => $discountAmount,
+//				'discount_percentage' => $discountPercentage,
+//				'net_total' => $netTotal,
+//
+//				'advance_balance' => $request->advance_balance ?? 0,
+//				'payment_due' => $paymentDue,
+//				'payment_status' => $request->payment_status,
+//				'payment_due_date' => $request->payment_due_date,
+//			]);
+//
+//			// Create sell items
+//
+//			foreach ($request->items as $item) {
+//				$SellItem = new SellItem([
+//					'product_id' => $item['product_id'],
+//					'quantity' => $item['quantity'],
+//					'unit_cost_before_tax' => $item['unit_cost'],
+//					'tax_amount' => $item['tax_amount'] ?? 0,
+//					'net_cost' => $item['net_cost'],
+//				]);
+//				$sell->items()->save($SellItem);
+//
+//				// Update product stock
+//				Product::where('id', $item['product_id'])
+//					->decrement('quantity', $item['quantity']);
+//			}
+//
+//			// Create shipping details if provided
+//			$trakingNumber = strtoupper(bin2hex(random_bytes(15)));
+//			if ($request->filled('shipping_address')) {
+//				$sell->shippingDetail()->create([
+//					'shipping_address' => $request->shipping_address,
+//					'shipping_method' => $request->shipping_method,
+//					'shipping_cost' => $request->shipping_cost,
+//					'expected_delivery_date' => $request->expected_delivery_date,
+//					'tracking_number' => $trakingNumber,
+//					'shipping_status' => $request->shipping_status,
+//				]);
+//			}
+//
+//			// Handle advance payment if any
+//
+//			$sell->payments()->create([
+//				'amount' => $request->advance_balance,
+//				'paid_on' => now(),
+//				'payment_method' => $request->payment_method,
+//				'payment_account' => $request->payment_account,
+//				'transaction_reference' => strtoupper(bin2hex(random_bytes(8))),
+//
+//				'payment_status' => $request->payment_status,
+//			]);
+//
+//			// Record sale
+//			$transaction = $this->transactionService->recordSale(
+//				$request->store_id,
+//				$request->advance_balance,
+//				'Sales',
+//				'Sales Record for ' . $sell->id,
+//				Auth::id(),
+//				$sell->id
+//			);
+//
+//			$this->transactionService->recordExpense(
+//				$sell->store_id,
+//				$discountAmount,
+//				'Discount',
+//				'Expense for Discount Record for Sell' . $sell->id,
+//				Auth::id(),
+//				$sell->id
+//			);
+//
+//
+//			$saleDetails = [
+//				'order_id' => $sell->id,
+//				'amount'=> $request->net_total,
+//				'paid_amount' => $request->advance_balance,
+//				'paymentDue' => $paymentDue,
+//				'discount' => $discountAmount,
+//			];
+//
+//
+//			if ($sell->customer->phone) {
+//				$response = $this->smsService->sendSaleConfirmation(
+//					$sell->customer->phone,
+//					$sell->customer->name,
+//					$saleDetails
+//				);
+//			}
+//
+//
+//			DB::commit();
+//			$sell->load('items', 'payments', 'shippingDetail');
+//
+//
+//			return $this->success(['id' => $sell->id], 'Sell created successfully');
+//		} catch (\Exception $e) {
+//			DB::rollBack();
+//			if (isset($documentPath)) {
+//				Storage::delete($documentPath);
+//			}
+//			return $this->error('Something Went Wrong : ', $e->getMessage(), 500);
+//		}
+//	}
+
+
 	/**
 	 * Display the specified resource.
 	 */
@@ -529,6 +680,174 @@ class SellsController extends Controller
 			return $this->error('Something Went Wrong: ', $e->getMessage(), 500);
 		}
 	}
+	//	public function update(UpdateSellRequest $request, $id) {
+//		try {
+//
+//			Log::info($request->all());
+//
+//			return response()->json([
+//				'success' => true,
+//				'data' => $id
+//			]);
+//
+//			$data = $request->isJson() ? $request->json()->all() : $request->all();
+//			DB::beginTransaction();
+//
+//			$sell = Sell::findOrFail($id);
+//
+//			$totalBeforeTax = $this->calculateTotalBeforeTax($request->items);
+//			$discountAmount = 0;
+//			$discountType = $request->discount_type;
+//			$discountPercentage = 0;
+//			if ($discountType === 'fixed') {
+//				$discountAmount = $request->discount_amount;
+//				$discountPercentage = 0;
+//			}
+//			if ($discountType === 'percentage') {
+//				$discountAmount = (($totalBeforeTax + $request->tax_amount) * $request->discount_amount) / 100;
+//				$discountPercentage = $request->discount_amount;
+//			}
+//			$netTotal = $totalBeforeTax - $discountAmount + $request->tax_amount + ($request->shipping_cost ?? 0);
+//			$paymentDue = 0;
+//			$advanceBalance = 0;
+//			if ($request->payment_status == 'completed') {
+//				$paymentDue = 0;
+//				$advanceBalance = $netTotal;
+//			} else {
+//				$paymentDue = $netTotal - ($request->advance_balance ?? 0);
+//			}
+//			// Update sell record
+//			$sell->update([
+//				'store_id' => $request->store_id,
+//				'customer_id' => $request->customer_id,
+//				'sell_date' => $request->sell_date,
+//				'sell_status' => $request->sell_status,
+//				'payment_term' => $request->pay_term,
+//				'payment_term_type' => $request->pay_term_type,
+//				'total_before_tax' => $totalBeforeTax,
+//
+//
+//				'tax_amount' => $request->tax_amount ?? 0,
+//				'discount_type' => $request->discount_type,
+//				'discount_amount' => $discountAmount,
+//				'discount_percentage' => $discountPercentage,
+//				'net_total' => $netTotal,
+//
+//				'advance_balance' => $advanceBalance,
+//				'payment_due' => $paymentDue,
+//				'payment_status' => $request->payment_status,
+//				'payment_due_date' => $request->payment_due_date,
+//			]);
+//
+//			// Update or create sell items
+//			$existingItemIds = $sell->items()->pluck('id')->toArray();
+//			$newItemIds = array_column($request->items, 'id');
+//			// Delete items not in request
+//			foreach (array_diff($existingItemIds, $newItemIds) as $itemIdToDelete) {
+//				$item = SellItem::find($itemIdToDelete);
+//				Product::where('id', $item->product_id)->increment('quantity', $item->quantity); // Restore stock
+//				$item->delete();
+//			}
+//
+//			foreach ($request->items as $item) {
+//				$unitCostBeforeTax = $item['unit_cost'] * (1 - ($item['discount_percent'] ?? 0) / 100);
+//				$netCost = $unitCostBeforeTax;
+//
+//				$sellItemData = [
+//					'product_id' => $item['product_id'],
+//					'quantity' => $item['quantity'],
+//					'unit_cost_before_tax' => $item['unit_cost'],
+//					'tax_amount' => $item['tax_amount'] ?? 0,
+//					'net_cost' => $item['net_cost'],
+//
+//				];
+//
+//				if (isset($item['id'])) {
+//					// Update existing item
+//					$existingItem = SellItem::find($item['id']);
+//					Product::where('id', $existingItem->product_id)->increment('quantity', $existingItem->quantity); // Restore old stock
+//					$existingItem->update($sellItemData);
+//					Product::where('id', $item['product_id'])->decrement('quantity', $item['quantity']);
+//				} else {
+//					// Create new item
+//					$sell->items()->create($sellItemData);
+//					Product::where('id', $item['product_id'])->decrement('quantity', $item['quantity']);
+//				}
+//			}
+//			// Update or create shipping details
+//			$trakingNumber = strtoupper(bin2hex(random_bytes(15)));
+//			if ($request->filled('shipping_address')) {
+//				$sell->shippingDetail()->updateOrCreate([], [
+//					'shipping_address' => $request->shipping_address,
+//					'shipping_method' => $request->shipping_method,
+//					'shipping_cost' => $request->shipping_cost,
+//					'expected_delivery_date' => $request->expected_delivery_date,
+//					'tracking_number' => $trakingNumber,
+//					'shipping_status' => $request->shipping_status,
+//				]);
+//			} else {
+//				$sell->shippingDetail()->delete(); // Delete shipping details if not provided
+//			}
+//			// Update or create advance payment
+//			$sell->payments()->updateOrCreate(
+//				['amount' => $request->advance_balance],
+//				[
+//
+//
+//					'paid_on' => now(),
+//					'payment_method' => $request->payment_method,
+//					'payment_account' => $request->payment_account,
+//					'payment_status' => 'completed',
+//				]
+//			);
+//			// In your controller:
+//			$updatedTransaction = $this->transactionService->updateTransaction(
+//				$sell->id,
+//				'income',
+//				$advanceBalance,
+//				'Sales',
+//				'Sales Record for ' . $sell->id,
+//				Auth::id()
+//			);
+//
+//			if (!$updatedTransaction) {
+//				return response()->json(['error' => 'Could not update transaction.'], 500);
+//			}
+//
+//			$saleDetails = [
+//				'order_id' => $sell->id,
+//				'amount'=> $request->edit_net_total,
+//				'paid_amount' => $request->advance_balance,
+//				'paymentDue' => $paymentDue,
+//				'discount' => $discountAmount,
+//			];
+//
+//
+//			if($sell->customer->phone )
+//			{
+//				$response = $this->smsService->sendSaleConfirmation(
+//					$sell->customer->phone,
+//					$sell->customer->name,
+//					$saleDetails
+//				);
+//			}
+//
+//
+//			DB::commit();
+//			$sell->load('items', 'payments', 'shippingDetail');
+//
+//
+//			return $this->success(['id' => $sell->id], 'Sell updated successfully');
+//		} catch (\Exception $e) {
+//			DB::rollBack();
+//			if (isset($documentPath) && $request->hasFile('document')) {
+//				Storage::delete($documentPath);
+//			}
+//			return $this->error('Something Went Wrong : ', $e->getMessage(), 500);
+//		}
+//	}
+
+
 	/**
 	 * Remove the specified resource from storage.
 	 */

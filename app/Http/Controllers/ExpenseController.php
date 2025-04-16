@@ -15,6 +15,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
@@ -298,8 +299,13 @@ class ExpenseController extends Controller
 
 			$expense->delete();
 
-			return response()->json(['success' => 'Category deleted successfully!']);
+			DB::commit();
+
+			return response()->json(['success' => 'Expense deleted successfully!']);
 		} catch (Exception $e) {
+
+			Log::error($e->getMessage());
+
 			DB::rollBack();
 			return response()->json(['error' => $e->getMessage()], 500);
 		}

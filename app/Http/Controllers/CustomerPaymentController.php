@@ -8,6 +8,7 @@ use App\Models\Sell;
 use App\Models\SellPayment;
 use App\Models\Store;
 use App\Services\SaleTransactionService;
+use App\Services\SMSService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -19,9 +20,11 @@ class CustomerPaymentController extends Controller
 {
 
 	protected SaleTransactionService $transactionService;
+	protected SMSService $smsService;
 
-	public function __construct(SaleTransactionService $transactionService) {
+	public function __construct(SaleTransactionService $transactionService, SMSService $smsService) {
 		$this->transactionService = $transactionService;
+		$this->smsService = $smsService;
 	}
 
 
@@ -178,6 +181,7 @@ class CustomerPaymentController extends Controller
 		}
 	}
 
+
 	public function store(Request $request, $id) {
 		try {
 			// Validate request
@@ -219,24 +223,26 @@ class CustomerPaymentController extends Controller
 			// Prepare array to track sell payments
 			$sellPayments = [];
 			$remainingDiscount = $discountAmount;
+			$totalPaymentApplied = 0;
+			$totalDiscountApplied = 0;
 
 			foreach ($pendingSells as $sell) {
 				if ($remainingAmount <= 0 && $remainingDiscount <= 0) {
 					break;
 				}
 
-				// First apply discount if available
 				$discountToApply = min($remainingDiscount, $sell->payment_due);
 				if ($discountToApply > 0) {
 					$sell->discount_amount = ($sell->discount_amount ?? 0) + $discountToApply;
 					$sell->net_total -= $discountToApply;
 					$sell->payment_due -= $discountToApply;
 					$remainingDiscount -= $discountToApply;
+					$totalDiscountApplied += $discountToApply;
 
 					$this->transactionService->recordExpense(
 						$sell->store_id,
 						$discountToApply,
-						"Discount",
+						'Discount',
 						'Expense for Discount Record for Sell' . $sell->id,
 						Auth::id(),
 						$sell->id
@@ -256,7 +262,6 @@ class CustomerPaymentController extends Controller
 						'transaction_reference' => $customerPayment->id
 					]);
 
-
 					// Record payment transaction
 					$this->transactionService->recordSale(
 						$sell->store_id,
@@ -270,6 +275,7 @@ class CustomerPaymentController extends Controller
 					// Reduce remaining amount
 					$remainingAmount -= $paymentToApply;
 					$sell->payment_due -= $paymentToApply;
+					$totalPaymentApplied += $paymentToApply;
 
 					// Store sell payment for response
 					$sellPayments[] = $sellPayment;
@@ -290,6 +296,22 @@ class CustomerPaymentController extends Controller
 				'balance' => DB::raw('balance - ' . ($validated['amount'] + $discountAmount))
 			]);
 
+			// Prepare and send SMS notification
+			if ($customer && $customer->phone) {
+				$paymentDetails = [
+					'order_id' => $customerPayment->id,
+					'amount' => $customer->fresh()->balance, // Total outstanding balance
+					'paid_amount' => $validated['amount'],
+					'paymentDue' => $customer->fresh()->balance,
+					'discount' => $discountAmount
+				];
+
+				$response = $this->smsService->sendPaymentConfirmation(
+					$customer->phone,
+					$customer->name,
+					$paymentDetails
+				);
+			}
 
 			DB::commit();
 

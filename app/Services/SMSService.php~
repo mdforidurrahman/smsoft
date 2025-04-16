@@ -80,8 +80,8 @@ class SMSService
 
 		// Get product info if available
 		$productInfo = isset($saleDetails['product_name']) ?
-			"{$saleDetails['product_name']} কেনার জন্য ধন্যবাদ। " :
-			'ব্যাটারি কেনাকাটার জন্য ধন্যবাদ। ';
+			"{$saleDetails['product_name']} ব্যাটারি কেনার জন্য ধন্যবাদ। " :
+			'কেনাকাটার জন্য ধন্যবাদ। ';
 		$message .= $productInfo;
 		$message .= "আইডি নম্বর-{$saleDetails['order_id']} ";
 		$message .= "মোট বাকি-{$saleDetails['amount']}, ";
@@ -139,21 +139,29 @@ class SMSService
 
 	public function sendPaymentConfirmation(string $customerNumber, string $customerName, array $paymentDetails): array {
 		// Bengali payment confirmation message
-		$message = "প্রিয় {$customerName} ভাই, ";
-		$message .= 'আপনার পেমেন্টের জন্য ধন্যবাদ। ';
+//		$message = "প্রিয় {$customerName} ভাই, ";
+//		$message .= 'আপনার পেমেন্টের জন্য ধন্যবাদ। ';
+//		$message .= "আইডি নম্বর-{$paymentDetails['order_id']} ";
+//		$message .= "মোট বাকি-{$paymentDetails['amount']}, ";
+//		$message .= "জমা-{$paymentDetails['paid_amount']}, ";
+//
+//		// Add discount info if any
+//		if ($paymentDetails['discount'] > 0) {
+//			$message .= "ছাড়-{$paymentDetails['discount']}, ";
+//		}
+//
+//		$message .= "অবশিষ্ট বাকি-{$paymentDetails['paymentDue']}।";
+//		$message .= "\nযেকোনো প্রয়োজনে যোগাযোগ করুন: ০১৩০০৯৪৫৯২";
+//
+//		return $this->sendSingleSMS($customerNumber, $message);
+
+		$message = "প্রিয় {$customerName} ভাই, কেনাকাটার জন্য ধন্যবাদ। ";
 		$message .= "আইডি নম্বর-{$paymentDetails['order_id']} ";
 		$message .= "মোট বাকি-{$paymentDetails['amount']}, ";
 		$message .= "জমা-{$paymentDetails['paid_amount']}, ";
-
-		// Add discount info if any
-		if ($paymentDetails['discount'] > 0) {
-			$message .= "ছাড়-{$paymentDetails['discount']}, ";
-		}
-
 		$message .= "অবশিষ্ট বাকি-{$paymentDetails['paymentDue']}।";
 		$message .= "\nযেকোনো প্রয়োজনে যোগাযোগ করুন: ০১৩০০৯৪৫৯২";
 
 		return $this->sendSingleSMS($customerNumber, $message);
-
 	}
 }
