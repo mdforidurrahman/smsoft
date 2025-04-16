@@ -257,14 +257,14 @@ class SellsController extends Controller
 			];
 
 
-			if($sell->customer->phone)
-			{
-				$response = $this->smsService->sendSaleConfirmation(
-					$sell->customer->phone,
-					$sell->customer->name,
-					$saleDetails
-				);
-			}
+//			if($sell->customer->phone)
+//			{
+//				$response = $this->smsService->sendSaleConfirmation(
+//					$sell->customer->phone,
+//					$sell->customer->name,
+//					$saleDetails
+//				);
+//			}
 
 
 			DB::commit();
@@ -468,14 +468,14 @@ class SellsController extends Controller
 				'item_count' => $sell->items->count(),
 			];
 
-			if($sell->customer->phone)
-			{
-				$response = $this->smsService->sendSaleConfirmation(
-					$sell->customer->phone,
-					$sell->customer->name,
-					$saleDetails
-				);
-			}
+//			if($sell->customer->phone )
+//			{
+//				$response = $this->smsService->sendSaleConfirmation(
+//					$sell->customer->phone,
+//					$sell->customer->name,
+//					$saleDetails
+//				);
+//			}
 
 
 			DB::commit();
