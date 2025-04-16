@@ -298,7 +298,8 @@
                             results: data.products.map(function (product) {
                                 return {
                                     id: product.id,
-                                    text: `${product.name} (${product.sku}) - (Quantity : ${product.quantity})`,
+                                    text: `${product.name} (${product.sku}) - (Price : ${product.price}) - (Quantity :
+                                    ${product.quantity})`,
                                     price: product.price
                                 };
                             })
