@@ -221,7 +221,7 @@ class ContactController extends Controller
 				->make(true);
 		}
 
-		return view('admin.contacts.supplier-index', compact('storeName','categories'));
+		return view('admin.contacts.supplier-index', compact('storeName', 'categories'));
 	}
 
 
@@ -345,25 +345,28 @@ class ContactController extends Controller
 
 				$storeAcronym = collect(explode(' ', $store->name))
 					->map(fn($word) => Str::upper(Str::substr($word, 0, 1)))
-					->join(''); // e.g., SMH
+					->join('');
 
-				$acronym = $storeAcronym . '-' . $categoryAcronym;
+				$baseAcronym = $storeAcronym . '_' . $categoryAcronym;
 
-				$latestContact = Contact::where('contact_id', 'LIKE', $storeAcronym . '_' . $categoryAcronym . '_%')
-					->orWhere('contact_id', $acronym)
+// Check if any contacts with this base acronym exist
+				$existingContacts = Contact::where('contact_id', $baseAcronym)
+					->orWhere('contact_id', 'LIKE', $baseAcronym . '_%')
 					->orderBy('contact_id', 'desc')
 					->first();
 
-				if ($latestContact) {
-					if (Str::contains($latestContact->contact_id, '_')) {
-						$number = (int)Str::afterLast($latestContact->contact_id, '_');
-						$contact_id = $storeAcronym . '_' . $categoryAcronym . '_' . str_pad($number + 1, 3, '0', STR_PAD_LEFT);
-					} else {
-						$contact_id = $storeAcronym . '_' . $categoryAcronym . '_001';
-					}
+				if (!$existingContacts) {
+					// No contacts exist, use the base acronym
+					$contact_id = $baseAcronym;
 				} else {
-					// First contact for this acronym combo
-					$contact_id = $acronym;
+					if ($existingContacts->contact_id === $baseAcronym) {
+						// Base acronym exists, create first numbered ID (001)
+						$contact_id = $baseAcronym . '_001';
+					} else {
+						// Numbered ID exists, increment it
+						$number = (int)Str::afterLast($existingContacts->contact_id, '_');
+						$contact_id = $baseAcronym . '_' . str_pad($number + 1, 3, '0', STR_PAD_LEFT);
+					}
 				}
 			} else {
 				$contact_id = $request->contact_id;

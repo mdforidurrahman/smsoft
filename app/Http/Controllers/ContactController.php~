@@ -62,7 +62,7 @@ class ContactController extends Controller
 	public function customers() {
 		$projects = Contact::whereRole('customer');
 
-		if (Auth::user()->hasRole('admin')) {
+		if (Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager')) {
 			$storeName = Store::where('status', 1)->latest()->get();
 			$projects = $projects->latest();
 		} else {
@@ -173,7 +173,7 @@ class ContactController extends Controller
 	public function supplier() {
 		$projects = Contact::whereRole('supplier');
 
-		if (Auth::user()->hasRole('admin')) {
+		if (Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager')) {
 			$storeName = Store::where('status', 1)->latest()->get();
 			$projects = $projects->latest();
 		} else {
@@ -362,7 +362,6 @@ class ContactController extends Controller
 						$contact_id = $storeAcronym . '_' . $categoryAcronym . '_001';
 					}
 				} else {
-					// First contact for this acronym combo
 					$contact_id = $acronym;
 				}
 			} else {
