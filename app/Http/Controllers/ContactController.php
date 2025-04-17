@@ -455,7 +455,7 @@ class ContactController extends Controller
 				'role' => 'required|string',
 				'phone' => 'required|string',
 				'nid' => 'required|string',
-				'contact_id' => 'required|string',
+				'contact_id' => 'nullable|string',
 				'store_id' => 'required|exists:stores,id',
 				'status' => 'required|integer|in:0,1',
 			]);
